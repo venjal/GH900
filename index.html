@@ -1,20 +1,726 @@
-<!DOCTYPE html>
-
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Spoon-Knife</title>
-  <LINK href="styles.css" rel="stylesheet" type="text/css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A concise study guide for the GH-900 GitHub Foundations certification exam.">
+  <title>GH-900 Study Guide</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; }
+    .icon { width: 20px; height: 20px; flex: 0 0 auto; stroke-width: 1.8; }
+    .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-panel-strong);
+      backdrop-filter: blur(12px);
+    }
+    .nav { height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; text-decoration: none; }
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-text);
+      color: var(--cp-bg);
+    }
+    .nav-actions { display: flex; align-items: center; gap: 8px; }
+    .icon-button {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+      cursor: pointer;
+    }
+    .icon-button:hover { border-color: var(--cp-border-strong); background: var(--cp-surface-soft); }
+
+    .hero {
+      min-height: min(680px, calc(100vh - 68px));
+      display: grid;
+      align-items: end;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--cp-border);
+      background-image: linear-gradient(to right, var(--cp-overlay), var(--cp-panel)), url("https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=2000&q=85");
+      background-position: center;
+      background-size: cover;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(to top, var(--cp-bg), transparent 45%);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; z-index: 1; padding: 96px 0 64px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 20px;
+      color: var(--cp-accent);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 28px; height: 2px; background: var(--cp-accent); }
+    h1 { max-width: 780px; margin: 0; font-size: clamp(3rem, 8vw, 6.6rem); line-height: 0.93; letter-spacing: 0; }
+    .hero-copy { max-width: 610px; margin: 24px 0 32px; color: var(--cp-text-soft); font-size: 1.15rem; line-height: 1.65; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .button {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 18px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+      text-decoration: none;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    .button:hover { background: var(--cp-surface-soft); border-color: var(--cp-border-strong); }
+    .button.primary { border-color: var(--cp-accent); background: var(--cp-accent); color: var(--cp-accent-fg); }
+    .button.primary:hover { background: var(--cp-accent-hover); }
+
+    main { padding: 72px 0 96px; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+    .section-head h2 { margin: 0 0 8px; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1; letter-spacing: 0; }
+    .section-head p { margin: 0; color: var(--cp-text-muted); }
+    .count { color: var(--cp-text-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .controls { display: grid; grid-template-columns: minmax(220px, 1fr) auto; gap: 16px; margin-bottom: 28px; }
+    .search { position: relative; }
+    .search .icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--cp-text-muted); }
+    .search input {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px 0 46px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      outline: none;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+    }
+    .search input:focus { border-color: var(--cp-accent); box-shadow: 0 0 0 3px var(--cp-highlight); }
+    .filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+    .filter {
+      height: 48px;
+      padding: 0 16px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .filter:hover { border-color: var(--cp-border-strong); }
+    .filter.active { border-color: var(--cp-accent); background: var(--cp-accent-soft); color: var(--cp-accent); font-weight: 700; }
+    .prompt-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+    .prompt-card {
+      min-height: 292px;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+      animation: rise 500ms both;
+    }
+    .prompt-card[hidden] { display: none; }
+    .prompt-card:hover { border-color: var(--cp-border-strong); transform: translateY(-2px); transition: transform 180ms ease; }
+    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .tag { color: var(--cp-accent); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; }
+    .favorite { border: 0; background: transparent; color: var(--cp-text-muted); cursor: pointer; padding: 6px; }
+    .favorite.active { color: var(--cp-accent); }
+    .prompt-card h3 { margin: 24px 0 12px; font-size: 1.35rem; line-height: 1.25; letter-spacing: 0; }
+    .prompt-card p { margin: 0; color: var(--cp-text-muted); line-height: 1.55; }
+    .topic-details { margin-top: 20px; border-top: 1px solid var(--cp-border); }
+    .topic-details summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 0 12px;
+      color: var(--cp-text);
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+    .topic-details summary::-webkit-details-marker { display: none; }
+    .topic-details summary::after { content: "+"; color: var(--cp-accent); font-size: 1.3rem; font-weight: 400; }
+    .topic-details[open] summary::after { content: "−"; }
+    .topic-list { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+    .topic-list li { position: relative; padding-left: 16px; color: var(--cp-text-muted); font-size: 0.92rem; line-height: 1.5; }
+    .topic-list li::before { content: ""; position: absolute; top: 0.65em; left: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--cp-accent); }
+    .topic-list strong { color: var(--cp-text); }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 24px; }
+    .meta { color: var(--cp-text-muted); font-family: Consolas, "Courier New", Courier, monospace; font-size: 0.78rem; }
+    .copy-button { width: 40px; height: 40px; }
+    .empty { display: none; padding: 64px 20px; text-align: center; color: var(--cp-text-muted); border-top: 1px solid var(--cp-border); }
+
+    .principles { margin-top: 80px; padding-top: 48px; border-top: 1px solid var(--cp-border); }
+    .principle-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+    .principle-number { color: var(--cp-accent); font-family: Consolas, "Courier New", Courier, monospace; }
+    .principle h3 { margin: 18px 0 8px; font-size: 1rem; }
+    .principle p { margin: 0; color: var(--cp-text-muted); line-height: 1.55; font-size: 0.94rem; }
+    .command-reference { margin-top: 80px; padding-top: 48px; border-top: 1px solid var(--cp-border); }
+    .command-reference .section-head { align-items: center; }
+    .command-note { max-width: 760px; line-height: 1.6; }
+    .command-groups { display: grid; gap: 36px; }
+    .command-group h3 { margin: 0 0 12px; font-size: 1.15rem; }
+    .command-list { margin: 0; border-top: 1px solid var(--cp-border); }
+    .command-row {
+      display: grid;
+      grid-template-columns: minmax(250px, 0.8fr) 1.7fr;
+      gap: 24px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .command-row dt, .command-row dd { margin: 0; }
+    .command-row dd { color: var(--cp-text-muted); line-height: 1.5; }
+    .command-row code {
+      color: var(--cp-accent);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 0.9rem;
+      overflow-wrap: anywhere;
+    }
+    .command-warning { color: var(--cp-danger); font-weight: 700; }
+    footer { padding: 28px 0; border-top: 1px solid var(--cp-border); color: var(--cp-text-muted); font-size: 0.9rem; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 16px; }
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-panel-strong);
+      box-shadow: var(--cp-shadow);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: 180ms ease;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 900px) {
+      .prompt-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .controls { grid-template-columns: 1fr; }
+      .principle-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 24px, 1180px); }
+      .brand span:last-child { display: none; }
+      .hero { min-height: calc(100svh - 68px); }
+      .hero-inner { padding: 72px 0 44px; }
+      h1 { font-size: clamp(2.8rem, 17vw, 4.4rem); }
+      .hero-copy { font-size: 1rem; }
+      main { padding: 56px 0 72px; }
+      .section-head { align-items: start; flex-direction: column; }
+      .prompt-grid, .principle-grid { grid-template-columns: 1fr; }
+      .prompt-card { min-height: 250px; }
+      .command-reference .section-head { align-items: stretch; }
+      .command-row { grid-template-columns: 1fr; gap: 6px; }
+      .footer-inner { flex-direction: column; }
+      .toast { right: 12px; bottom: 12px; left: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  </style>
 </head>
-
 <body>
+  <header class="topbar">
+    <nav class="nav shell" aria-label="Primary navigation">
+      <a class="brand" href="#top" aria-label="GH-900 Study Guide home">
+        <span class="brand-mark">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M8 9h8M8 13h5"/><path d="M7 19l-4 2 1.4-4.2A8 8 0 1 1 7 19Z"/></svg>
+        </span>
+        <span>GH-900 Study Guide</span>
+      </a>
+      <div class="nav-actions">
+        <button class="icon-button" id="favoritesToggle" type="button" title="Show favorites" aria-label="Show favorites" aria-pressed="false">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg>
+        </button>
+        <button class="icon-button" id="themeToggle" type="button" title="Toggle color theme" aria-label="Toggle color theme">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+        </button>
+      </div>
+    </nav>
+  </header>
 
-<img src="forkit.gif" id="octocat" alt="" />
+  <section class="hero" id="top">
+    <div class="hero-inner shell">
+      <p class="eyebrow">GitHub Foundations certification</p>
+      <h1>GH-900<br>Study Guide</h1>
+      <p class="hero-copy">A focused review of the seven exam domains, from Git fundamentals and repository workflows to security, automation, and open-source collaboration.</p>
+      <div class="hero-actions">
+        <a class="button primary" href="#library">
+          Browse topics
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>
+        </a>
+        <button class="button" id="randomPrompt" type="button">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+          Pick a topic
+        </button>
+      </div>
+    </div>
+  </section>
 
-<!-- Feel free to change this text here -->
-<p>
-  Fork me? Fork you, @octocat!
-</p>
+  <main class="shell" id="library">
+    <div class="section-head">
+      <div>
+        <h2>Exam topics</h2>
+        <p>Skills measured in the January 2026 GH-900 exam blueprint.</p>
+      </div>
+      <span class="count" id="resultCount">7 topics</span>
+    </div>
+    <div class="controls">
+      <label class="search">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        <input id="searchInput" type="search" placeholder="Search exam topics" aria-label="Search exam topics">
+      </label>
+      <div class="filters" aria-label="Filter exam topic categories">
+        <button class="filter active" type="button" data-filter="all">All</button>
+        <button class="filter" type="button" data-filter="core">Core</button>
+        <button class="filter" type="button" data-filter="workflow">Workflow</button>
+        <button class="filter" type="button" data-filter="platform">Platform</button>
+        <button class="filter" type="button" data-filter="community">Community</button>
+      </div>
+    </div>
 
+    <section class="prompt-grid" id="promptGrid" aria-live="polite">
+      <article class="prompt-card" data-category="core" data-id="basics" data-search="git github basics version control commits branches accounts organizations enterprise flow markdown desktop mobile">
+        <div class="card-top"><span class="tag">Core</span><button class="favorite" type="button" aria-label="Favorite Git and GitHub basics topic"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg></button></div>
+        <h3>Git and GitHub basics</h3>
+        <p>Understand why version control matters, how Git differs from GitHub, and how commits, branches, accounts, organizations, GitHub Flow, and Markdown fit together.</p>
+        <details class="topic-details" open>
+          <summary>Key items</summary>
+          <ul class="topic-list">
+            <li><strong>Version control:</strong> Tracks changes over time, supports recovery, and lets contributors work safely in parallel.</li>
+            <li><strong>Git versus GitHub:</strong> Git is the distributed version-control system; GitHub hosts Git repositories and adds collaboration services.</li>
+            <li><strong>Repositories, commits, and branches:</strong> Repositories hold project history, commits record snapshots, and branches isolate lines of work.</li>
+            <li><strong>Account structures:</strong> Distinguish personal accounts, organizations for teams, and enterprise options for centralized governance.</li>
+            <li><strong>GitHub Flow:</strong> Create a branch, make commits, open a pull request, review, merge, and deploy.</li>
+            <li><strong>Markdown:</strong> Format README files, issues, pull requests, comments, tables, task lists, links, and code blocks.</li>
+            <li><strong>Desktop and Mobile:</strong> Use GitHub Desktop for visual Git workflows and GitHub Mobile for notifications, reviews, and lightweight collaboration.</li>
+          </ul>
+        </details>
+        <div class="card-footer"><span class="meta">25–30% of exam</span><button class="icon-button copy-button" type="button" title="Copy study notes" aria-label="Copy Git and GitHub basics study notes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button></div>
+        <template>Git and GitHub basics (25–30%): version control benefits; Git vs. GitHub; repositories, commits, and branches; accounts, organizations, and enterprise options; GitHub Flow; Markdown; GitHub Desktop and Mobile.</template>
+      </article>
+      <article class="prompt-card" data-category="core" data-id="repositories" data-search="repositories readme license contributing codeowners security templates branches files insights stars metrics dependencies maintenance">
+        <div class="card-top"><span class="tag">Core</span><button class="favorite" type="button" aria-label="Favorite repositories topic"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg></button></div>
+        <h3>GitHub repositories</h3>
+        <p>Know repository structure and key files, then learn how templates, branches, files, insights, stars, metrics, and dependency views support healthy maintenance.</p>
+        <details class="topic-details" open>
+          <summary>Key items</summary>
+          <ul class="topic-list">
+            <li><strong>Key repository files:</strong> README explains the project, LICENSE defines use, CONTRIBUTING sets contribution rules, CODEOWNERS assigns reviewers, and SECURITY explains vulnerability reporting.</li>
+            <li><strong>Create and organize:</strong> Start from scratch or a template, choose visibility, and use branches to separate stable and in-progress work.</li>
+            <li><strong>Manage files:</strong> Create, edit, rename, move, and delete files through GitHub or a local Git workflow.</li>
+            <li><strong>Repository visibility:</strong> Use insights, stars, feature previews, metrics dashboards, and dependency views to understand health and reach.</li>
+            <li><strong>Maintenance:</strong> Keep documentation current, use clear naming, review dependencies, archive inactive work, and establish contribution standards.</li>
+          </ul>
+        </details>
+        <div class="card-footer"><span class="meta">10–15% of exam</span><button class="icon-button copy-button" type="button" title="Copy study notes" aria-label="Copy repositories study notes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button></div>
+        <template>GitHub repositories (10–15%): README, LICENSE, CONTRIBUTING, CODEOWNERS, and SECURITY files; repository templates and branches; file management; insights, stars, feature previews, metrics, and dependencies; maintenance best practices.</template>
+      </article>
+      <article class="prompt-card" data-category="workflow" data-id="collaboration" data-search="collaboration issues pull requests discussions links templates filters assignments notifications gists wikis pages">
+        <div class="card-top"><span class="tag">Workflow</span><button class="favorite" type="button" aria-label="Favorite collaboration topic"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg></button></div>
+        <h3>Collaboration with GitHub</h3>
+        <p>Use issues, pull requests, discussions, notifications, templates, and assignments to coordinate work, plus Gists, Wikis, and Pages to share knowledge.</p>
+        <details class="topic-details" open>
+          <summary>Key items</summary>
+          <ul class="topic-list">
+            <li><strong>Issues, pull requests, and discussions:</strong> Track work with issues, propose code changes with pull requests, and hold open-ended community conversations in discussions.</li>
+            <li><strong>Connected work:</strong> Link pull requests to issues for automatic closure, and use templates, filters, labels, and assignees to keep work consistent.</li>
+            <li><strong>Notifications:</strong> Watch repositories or threads and tune notification settings so important activity reaches the right inbox.</li>
+            <li><strong>Knowledge sharing:</strong> Use Gists for snippets, Wikis for repository documentation, and GitHub Pages for hosted static sites.</li>
+          </ul>
+        </details>
+        <div class="card-footer"><span class="meta">10–15% of exam</span><button class="icon-button copy-button" type="button" title="Copy study notes" aria-label="Copy collaboration study notes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button></div>
+        <template>Collaboration with GitHub (10–15%): issues, pull requests, and discussions; linking PRs to issues; templates, filters, and assignments; notification configuration; Gists, Wikis, and GitHub Pages.</template>
+      </article>
+      <article class="prompt-card" data-category="platform" data-id="modern-development" data-search="modern development actions automation copilot agents agent mode multi model individuals business enterprise codespaces dev containers github.dev">
+        <div class="card-top"><span class="tag">Platform</span><button class="favorite" type="button" aria-label="Favorite modern development topic"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg></button></div>
+        <h3>Modern development practices</h3>
+        <p>Recognize how Actions automates workflows, Copilot assists development, and Codespaces, dev containers, and github.dev provide cloud-based coding environments.</p>
+        <details class="topic-details" open>
+          <summary>Key items</summary>
+          <ul class="topic-list">
+            <li><strong>GitHub Actions:</strong> Automates CI/CD and repository tasks with event-triggered workflows made of jobs and steps.</li>
+            <li><strong>GitHub Copilot:</strong> Provides AI-assisted code suggestions, chat, agents, Agent Mode, and a choice of supported models.</li>
+            <li><strong>Copilot plans:</strong> Understand how individual, Business, and Enterprise offerings differ in licensing, policy control, and organizational context.</li>
+            <li><strong>Codespaces:</strong> Supplies configurable cloud development environments that can be standardized with dev container configuration.</li>
+            <li><strong>github.dev:</strong> Offers a lightweight browser editor for quick changes, while Codespaces includes compute, terminals, and a full development environment.</li>
+          </ul>
+        </details>
+        <div class="card-footer"><span class="meta">10–15% of exam</span><button class="icon-button copy-button" type="button" title="Copy study notes" aria-label="Copy modern development study notes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button></div>
+        <template>Modern development practices (10–15%): GitHub Actions; Copilot suggestions, agents, Agent Mode, and multi-model support; Copilot plans; Codespaces and dev containers; github.dev compared with Codespaces.</template>
+      </article>
+      <article class="prompt-card" data-category="workflow" data-id="projects" data-search="projects tracking organization layouts labels milestones workflows saved replies assignees insights progress productivity">
+        <div class="card-top"><span class="tag">Workflow</span><button class="favorite" type="button" aria-label="Favorite projects topic"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg></button></div>
+        <h3>Project management</h3>
+        <p>Organize work with GitHub Projects, views, labels, milestones, workflows, assignees, and saved replies, then use insights to assess progress.</p>
+        <details class="topic-details" open>
+          <summary>Key items</summary>
+          <ul class="topic-list">
+            <li><strong>Projects and layouts:</strong> Track issues, pull requests, and draft items in table, board, or roadmap views.</li>
+            <li><strong>Organization tools:</strong> Use custom fields, labels, milestones, filters, and built-in workflows to classify and automate work.</li>
+            <li><strong>Efficient communication:</strong> Assign owners to clarify responsibility and use saved replies for consistent, repeatable responses.</li>
+            <li><strong>Project insights:</strong> Build charts from project data to monitor progress, workload, trends, and productivity.</li>
+          </ul>
+        </details>
+        <div class="card-footer"><span class="meta">5–10% of exam</span><button class="icon-button copy-button" type="button" title="Copy study notes" aria-label="Copy projects study notes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button></div>
+        <template>Project management (5–10%): GitHub Projects and layouts; labels, milestones, and workflows; saved replies and assignees; project insights for progress and productivity.</template>
+      </article>
+      <article class="prompt-card" data-category="platform" data-id="security" data-search="privacy security administration 2fa passkeys access permissions roles enterprise managed users emu copilot policy visibility branch protection organizations teams">
+        <div class="card-top"><span class="tag">Platform</span><button class="favorite" type="button" aria-label="Favorite security and administration topic"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg></button></div>
+        <h3>Privacy, security, and administration</h3>
+        <p>Secure accounts with 2FA or passkeys and understand permissions, roles, visibility, branch protection, teams, EMUs, and organization-wide Copilot policies.</p>
+        <details class="topic-details" open>
+          <summary>Key items</summary>
+          <ul class="topic-list">
+            <li><strong>Account protection:</strong> Use two-factor authentication and passkeys to reduce the risk of password-based account compromise.</li>
+            <li><strong>Permissions and roles:</strong> Know common repository and organization roles and grant only the access each person needs.</li>
+            <li><strong>Enterprise controls:</strong> Enterprise Managed Users centralize identity lifecycle, while Copilot policies control feature availability across organizations.</li>
+            <li><strong>Privacy and protection:</strong> Choose public, private, or internal visibility and use branch protection rules to enforce review and status-check requirements.</li>
+            <li><strong>Organization administration:</strong> Manage settings, teams, membership, repository access, and role assignments at organization scope.</li>
+          </ul>
+        </details>
+        <div class="card-footer"><span class="meta">10–15% of exam</span><button class="icon-button copy-button" type="button" title="Copy study notes" aria-label="Copy security and administration study notes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button></div>
+        <template>Privacy, security, and administration (10–15%): 2FA and passkeys; repository and organization permissions; Enterprise Managed Users and Copilot policies; privacy and visibility; branch protection; organization settings, teams, and roles.</template>
+      </article>
+      <article class="prompt-card" data-category="community" data-id="community" data-search="community open source sponsors follow users organizations marketplace innersource forks templates discoverable repositories">
+        <div class="card-top"><span class="tag">Community</span><button class="favorite" type="button" aria-label="Favorite GitHub community topic"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></svg></button></div>
+        <h3>The GitHub community</h3>
+        <p>Learn how open source, Sponsors, following, Marketplace, InnerSource, forks, templates, and discoverability help people share and sustain software.</p>
+        <details class="topic-details" open>
+          <summary>Key items</summary>
+          <ul class="topic-list">
+            <li><strong>Open source and Sponsors:</strong> Open development enables reuse and collaboration, while Sponsors provides financial support to maintainers.</li>
+            <li><strong>GitHub's role:</strong> Hosting, collaboration, discovery, automation, and security features help open-source projects grow and operate.</li>
+            <li><strong>Following:</strong> Follow people and organizations to see their public activity and discover relevant work.</li>
+            <li><strong>GitHub Marketplace:</strong> Find apps and Actions that extend GitHub workflows and integrate external services.</li>
+            <li><strong>InnerSource:</strong> Apply open-source collaboration practices inside an organization while keeping repositories private or internal.</li>
+            <li><strong>Reuse and discovery:</strong> Fork repositories to contribute independently, use templates to standardize new projects, and improve metadata so repositories can be found.</li>
+          </ul>
+        </details>
+        <div class="card-footer"><span class="meta">5–10% of exam</span><button class="icon-button copy-button" type="button" title="Copy study notes" aria-label="Copy GitHub community study notes"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg></button></div>
+        <template>The GitHub community (5–10%): open-source benefits and GitHub Sponsors; following users and organizations; GitHub Marketplace; InnerSource; forks, templates, and discoverable repositories.</template>
+      </article>
+    </section>
+    <div class="empty" id="emptyState">No exam topics match this view.</div>
+
+    <section class="principles" aria-labelledby="principlesTitle">
+      <div class="section-head"><div><h2 id="principlesTitle">How to prepare</h2><p>Turn the blueprint into practical exam readiness.</p></div></div>
+      <div class="principle-grid">
+        <div class="principle"><span class="principle-number">01</span><h3>Start with the weights</h3><p>Spend the most time on Git and GitHub basics, the largest exam domain.</p></div>
+        <div class="principle"><span class="principle-number">02</span><h3>Practice in GitHub</h3><p>Create branches, issues, pull requests, projects, and workflows in a test repository.</p></div>
+        <div class="principle"><span class="principle-number">03</span><h3>Compare similar tools</h3><p>Know when to use Discussions versus issues, and github.dev versus Codespaces.</p></div>
+        <div class="principle"><span class="principle-number">04</span><h3>Check readiness</h3><p>Use the official practice assessment and revisit weak domains before exam day.</p></div>
+      </div>
+    </section>
+
+    <section class="command-reference" aria-labelledby="commandsTitle">
+      <div class="section-head">
+        <div>
+          <h2 id="commandsTitle">Git command reference</h2>
+          <p class="command-note">GH-900 tests foundational Git concepts more than command memorization. These commands cover the practical workflows associated with the exam objectives.</p>
+        </div>
+        <button class="button" id="copyCommands" type="button">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>
+          Copy command sheet
+        </button>
+      </div>
+
+      <div class="command-groups">
+        <section class="command-group" aria-labelledby="setupCommands">
+          <h3 id="setupCommands">Setup and help</h3>
+          <dl class="command-list">
+            <div class="command-row"><dt><code class="command-code">git --version</code></dt><dd>Display the installed Git version.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git config --global user.name "Your Name"</code></dt><dd>Set the author name used for commits on this computer.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git config --global user.email "you@example.com"</code></dt><dd>Set the email associated with new commits.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git config --list</code></dt><dd>Review effective Git configuration values.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git help &lt;command&gt;</code></dt><dd>Open detailed help for a Git command, such as <code>git help commit</code>.</dd></div>
+          </dl>
+        </section>
+
+        <section class="command-group" aria-labelledby="repositoryCommands">
+          <h3 id="repositoryCommands">Create and connect repositories</h3>
+          <dl class="command-list">
+            <div class="command-row"><dt><code class="command-code">git init</code></dt><dd>Initialize a new local Git repository in the current folder.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git clone &lt;repository-url&gt;</code></dt><dd>Download a remote repository, its files, branches, and history.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git remote -v</code></dt><dd>List configured remote names and their fetch and push URLs.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git remote add origin &lt;repository-url&gt;</code></dt><dd>Connect the local repository to a remote named <code>origin</code>.</dd></div>
+          </dl>
+        </section>
+
+        <section class="command-group" aria-labelledby="changeCommands">
+          <h3 id="changeCommands">Inspect and record changes</h3>
+          <dl class="command-list">
+            <div class="command-row"><dt><code class="command-code">git status</code></dt><dd>Show the current branch and staged, modified, or untracked files.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git add &lt;file&gt;</code></dt><dd>Stage one file for the next commit.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git add .</code></dt><dd>Stage all current changes beneath the working directory.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git diff</code></dt><dd>Display unstaged changes in the working tree.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git diff --staged</code></dt><dd>Display changes already staged for the next commit.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git commit -m "message"</code></dt><dd>Create a commit from staged changes with a concise description.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git rm &lt;file&gt;</code></dt><dd>Remove a tracked file and stage its deletion.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git mv &lt;old&gt; &lt;new&gt;</code></dt><dd>Move or rename a tracked file and stage the change.</dd></div>
+          </dl>
+        </section>
+
+        <section class="command-group" aria-labelledby="historyCommands">
+          <h3 id="historyCommands">Review history</h3>
+          <dl class="command-list">
+            <div class="command-row"><dt><code class="command-code">git log</code></dt><dd>Display commit history with author, date, and message details.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git log --oneline --graph --decorate</code></dt><dd>Show a compact visual history of branches, merges, and references.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git show &lt;commit&gt;</code></dt><dd>Inspect one commit and the changes it introduced.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git blame &lt;file&gt;</code></dt><dd>Show the last commit and author responsible for each line.</dd></div>
+          </dl>
+        </section>
+
+        <section class="command-group" aria-labelledby="branchCommands">
+          <h3 id="branchCommands">Branches and merging</h3>
+          <dl class="command-list">
+            <div class="command-row"><dt><code class="command-code">git branch</code></dt><dd>List local branches and identify the current branch.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git branch &lt;branch-name&gt;</code></dt><dd>Create a branch without switching to it.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git switch &lt;branch-name&gt;</code></dt><dd>Switch to an existing branch.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git switch -c &lt;branch-name&gt;</code></dt><dd>Create a new branch and switch to it.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git checkout &lt;branch-name&gt;</code></dt><dd>Common older syntax for switching branches; <code>git switch</code> is clearer for this task.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git merge &lt;branch-name&gt;</code></dt><dd>Integrate the named branch into the current branch.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git branch -d &lt;branch-name&gt;</code></dt><dd>Delete a local branch after Git confirms its work has been merged.</dd></div>
+          </dl>
+        </section>
+
+        <section class="command-group" aria-labelledby="remoteCommands">
+          <h3 id="remoteCommands">Synchronize with GitHub</h3>
+          <dl class="command-list">
+            <div class="command-row"><dt><code class="command-code">git fetch origin</code></dt><dd>Download remote commits and references without merging them.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git pull origin main</code></dt><dd>Fetch the remote <code>main</code> branch and integrate it into the current branch.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git push origin &lt;branch-name&gt;</code></dt><dd>Upload a local branch and its commits to GitHub.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git push -u origin &lt;branch-name&gt;</code></dt><dd>Push a branch and set its upstream so later <code>git push</code> and <code>git pull</code> commands can omit names.</dd></div>
+          </dl>
+        </section>
+
+        <section class="command-group" aria-labelledby="undoCommands">
+          <h3 id="undoCommands">Undo and pause work</h3>
+          <dl class="command-list">
+            <div class="command-row"><dt><code class="command-code">git restore &lt;file&gt;</code></dt><dd>Discard unstaged changes in a working-tree file.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git restore --staged &lt;file&gt;</code></dt><dd>Unstage a file while preserving its working-tree changes.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git revert &lt;commit&gt;</code></dt><dd>Create a new commit that safely reverses an earlier commit.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git reset --soft HEAD~1</code></dt><dd>Move the branch back one commit while keeping the changes staged.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git reset --hard HEAD~1</code></dt><dd><span class="command-warning">Destructive:</span> move back one commit and discard matching staged and working-tree changes.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git stash</code></dt><dd>Temporarily save uncommitted tracked changes and clean the working tree.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git stash pop</code></dt><dd>Reapply the latest stash and remove it from the stash list if successful.</dd></div>
+          </dl>
+        </section>
+
+        <section class="command-group" aria-labelledby="tagCommands">
+          <h3 id="tagCommands">Tags and releases</h3>
+          <dl class="command-list">
+            <div class="command-row"><dt><code class="command-code">git tag</code></dt><dd>List tags that mark important points in repository history.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git tag -a v1.0 -m "Version 1.0"</code></dt><dd>Create an annotated tag with a message.</dd></div>
+            <div class="command-row"><dt><code class="command-code">git push origin v1.0</code></dt><dd>Publish a specific tag to GitHub.</dd></div>
+          </dl>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="footer-inner shell"><span>GH-900 Study Guide</span><a href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/gh-900" target="_blank" rel="noreferrer">Official Microsoft Learn blueprint</a></div></footer>
+  <div class="toast" id="toast" role="status"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg><span>Study notes copied</span></div>
+
+  <script>
+    const cards = [...document.querySelectorAll(".prompt-card")];
+    const filters = [...document.querySelectorAll(".filter")];
+    const searchInput = document.querySelector("#searchInput");
+    const resultCount = document.querySelector("#resultCount");
+    const emptyState = document.querySelector("#emptyState");
+    const favoritesToggle = document.querySelector("#favoritesToggle");
+    const toast = document.querySelector("#toast");
+    let activeFilter = "all";
+    let favoritesOnly = false;
+    let toastTimer;
+    const favorites = new Set(JSON.parse(localStorage.getItem("promptFavorites") || "[]"));
+
+    function refreshCards() {
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+      cards.forEach((card, index) => {
+        const categoryMatch = activeFilter === "all" || card.dataset.category === activeFilter;
+        const searchMatch = !query || card.textContent.toLowerCase().includes(query);
+        const favoriteMatch = !favoritesOnly || favorites.has(card.dataset.id);
+        const show = categoryMatch && searchMatch && favoriteMatch;
+        card.hidden = !show;
+        if (show) {
+          card.style.animationDelay = `${visible * 55}ms`;
+          visible += 1;
+        }
+        card.querySelector(".favorite").classList.toggle("active", favorites.has(card.dataset.id));
+        card.querySelector(".favorite").setAttribute("aria-pressed", favorites.has(card.dataset.id));
+      });
+      resultCount.textContent = `${visible} ${visible === 1 ? "topic" : "topics"}`;
+      emptyState.style.display = visible ? "none" : "block";
+    }
+
+    function showToast(message) {
+      toast.querySelector("span").textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    filters.forEach((button) => button.addEventListener("click", () => {
+      activeFilter = button.dataset.filter;
+      filters.forEach((item) => item.classList.toggle("active", item === button));
+      refreshCards();
+    }));
+
+    searchInput.addEventListener("input", refreshCards);
+    favoritesToggle.addEventListener("click", () => {
+      favoritesOnly = !favoritesOnly;
+      favoritesToggle.classList.toggle("active", favoritesOnly);
+      favoritesToggle.setAttribute("aria-pressed", favoritesOnly);
+      favoritesToggle.title = favoritesOnly ? "Show all prompts" : "Show favorites";
+      refreshCards();
+    });
+
+    cards.forEach((card) => {
+      card.querySelector(".favorite").addEventListener("click", () => {
+        favorites.has(card.dataset.id) ? favorites.delete(card.dataset.id) : favorites.add(card.dataset.id);
+        localStorage.setItem("promptFavorites", JSON.stringify([...favorites]));
+        refreshCards();
+      });
+      card.querySelector(".copy-button").addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(card.querySelector("template").content.textContent.trim());
+          showToast("Study notes copied");
+        } catch {
+          showToast("Clipboard unavailable");
+        }
+      });
+    });
+
+    document.querySelector("#randomPrompt").addEventListener("click", () => {
+      const card = cards[Math.floor(Math.random() * cards.length)];
+      activeFilter = "all";
+      favoritesOnly = false;
+      searchInput.value = "";
+      filters.forEach((item) => item.classList.toggle("active", item.dataset.filter === "all"));
+      refreshCards();
+      card.scrollIntoView({ behavior: "smooth", block: "center" });
+      card.animate([{ outline: "3px solid var(--cp-accent)" }, { outline: "0 solid var(--cp-accent)" }], { duration: 900 });
+    });
+
+    document.querySelector("#themeToggle").addEventListener("click", () => {
+      const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = next;
+    });
+
+    document.querySelector("#copyCommands").addEventListener("click", async () => {
+      const commandSheet = [...document.querySelectorAll(".command-row")]
+        .map((row) => `${row.querySelector(".command-code").textContent} — ${row.querySelector("dd").textContent}`)
+        .join("\n");
+      try {
+        await navigator.clipboard.writeText(commandSheet);
+        showToast("Command sheet copied");
+      } catch {
+        showToast("Clipboard unavailable");
+      }
+    });
+
+    refreshCards();
+  </script>
 </body>
 </html>
